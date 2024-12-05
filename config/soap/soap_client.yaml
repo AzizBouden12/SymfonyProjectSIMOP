@@ -1,0 +1,11 @@
+soap_client:
+  wsdl:
+    uri: 'https://srv-webserver.domgp.local/TestService/Service1.asmx?WSDL'
+  destinations:
+    types: 'src/Soap/Type'
+    client: 'src/Soap/Client'
+    classmap: 'src/Soap/Classmap'
+  namespaces:
+    types: 'App\\Soap\\Type'
+    client: 'App\\Soap\\Client'
+    classmap: 'App\\Soap\\Classmap'

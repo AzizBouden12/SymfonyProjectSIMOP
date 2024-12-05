@@ -1,0 +1,47 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/Login.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="login-page">
+        <div class="login-container">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="alert alert-info mb-3 text-center">
+                    Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+                </div>
+
+                <script>
+                    window.location.href = "{{ path('BL') }}";
+                </script>
+            {% endif %}
+
+            <h1 class="login-title">Veuillez vous connecter</h1>
+
+            <form method="post" action="{{ path('app_login') }}" class="login-form">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                </div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+
+            <div class="forgot-password mt-3">
+                <a href="{{ path('forgottenPassword') }}">Mot de passe oublié ?</a>
+            </div>
+            <div class="create-account mt-4">
+                <p>Pas de compte ? <a href="{{ path('CreateAccount') }}">Créer votre compte</a></p>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

@@ -1,0 +1,226 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BL{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <form id="bl-form" action="{{ path('BL') }}" method="POST">
+            <div class="form-group">
+                <div class="input-group">
+
+                    <label for="fournisseur">Nom Fournisseur</label>
+                    {% if listefournisseur is defined %}
+                        <select id="fournisseur" name="fournisseur">
+                            {% set x = 1 %}
+                            {% for i in 0..incr-1 %}
+                                <option value="{{ listefournisseur[i + x - 1] }}"> {{ listefournisseur[i + x] }}</option>
+                                {% set x = x + 1 %}
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                </div>
+                <div class="input-group">
+                    <label for="numFacture">Numéro Facture</label>
+                    <input type="text" id="numFacture" name="numFacture" placeholder="Numéro Facture" required="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label for="dateFacture">Date Facture</label>
+                    <input type="text" id="dateFacture" name="dateFacture" class="flatpickr" required="true">
+                </div>
+                <div class="input-group">
+                    <label for="totalFacture">Total Facture (HT)</label>
+                    <input type="text" id="totalFacture" name="totalFacture" placeholder="Total Facture (HT)" required="true">
+                </div>
+            </div>
+            <input type="hidden" id="checkedValues" name="checkedValues">
+            <button class="btn" type="submit" id="verifyBtn" name="verifyBLs">Vérifier</button>
+
+        </form>
+    </div>
+
+    <div class="distinguished-section hidden">
+        <h2 class="section-title">Les BLs de cette facture :</h2>
+        <div class="table-container">
+            <table id="bl-table" class="bl-table">
+                <thead>
+                <tr>
+                    <th>Selection</th>
+                    <th>Numéro BL</th>
+                    <th>Montant</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set x=0 %}
+
+                {% for i in 0..nbrlbls-1 %}
+                <tr>
+                    <td><input type="checkbox" name="option{{ loop.index }}"></td>
+                    <td>{{ listeBLs[3+x] }}</td>
+                    <td>{{ listeBLs[0+x] }}</td>
+
+                </tr>
+
+                {% set x=x+10 %}
+                {% endfor %}
+
+
+
+
+
+
+
+                {% set totalAmount = 0 %}
+                {% if bls is not empty %}
+                    {% for bl in bls %}
+                        <tr>
+                            <td><input type="checkbox" name="option{{ loop.index }}"></td>
+                            <td>{{ bl.numBL }}</td>
+                            <td>
+                                {% set montantNumeric = (bl.montant|replace({',': '.'})) + 0 %}
+                                {{ montantNumeric }} DT
+                            </td>
+                        </tr>
+                        {% set totalAmount = totalAmount + montantNumeric %}
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">Aucun BL trouvé</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <td></td>
+                    <td class="text-black float-left">
+                        <span class="text-black right">Montant Total</span>
+                        <span id="totalAmount" style="font-size: 20px;">{{ totalAmount|number_format(2, '.', ',') }} DT</span>
+
+                    </td>
+                    <td></td>
+
+                </tr>
+
+                </tbody>
+            </table>
+            <button class="btn" type="button" id="validateBtn" name="validateBLs" disabled>Valider</button>
+        </div>
+    </div>
+
+    <div class="scrolling-table hidden">
+        <table>
+            <thead>
+            <tr>
+                <th>Num BL</th>
+                <th>Référence</th>
+                <th>Désignation</th>
+                <th>Montant</th>
+                <th>Qté</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if blDetails is not empty %}
+                {% for detail in blDetails %}
+                    <tr>
+                        <td>{{ detail.numCommande }}</td>
+                        <td>{{ detail.reference }}</td>
+                        <td>{{ detail.designation }}</td>
+                        <td>{{ detail.montant|replace({',': '.'}) + 0 }} DT</td>
+                        <td>{{ detail.quantite }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5">Aucun détail de BL trouvé</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+    <script>
+        flatpickr(".flatpickr", {
+            dateFormat: "d/m/Y"
+        });
+
+        function checkFormFields() {
+            var numFacture = document.getElementById('numFacture').value;
+            var dateFacture = document.getElementById('dateFacture').value;
+            var totalFacture = document.getElementById('totalFacture').value;
+            var verifyBtn = document.getElementById('verifyBtn');
+
+            if (numFacture && dateFacture && totalFacture) {
+                verifyBtn.disabled = false;
+            } else {
+                verifyBtn.disabled = true;
+            }
+        }
+
+        document.getElementById('numFacture').addEventListener('input', checkFormFields);
+        document.getElementById('dateFacture').addEventListener('input', checkFormFields);
+        document.getElementById('totalFacture').addEventListener('input', checkFormFields);
+
+        document.getElementById('verifyBtn').addEventListener('click', function (e) {
+            e.preventDefault(); // Empêche la soumission immédiate du formulaire
+            document.querySelector('.distinguished-section').classList.remove('hidden');
+            checkCheckboxes();
+        });
+
+        function checkCheckboxes() {
+            var validateBtn = document.getElementById('validateBtn');
+            var checkboxes = document.querySelectorAll('#bl-table input[type="checkbox"]');
+            var checked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+            validateBtn.disabled = !checked;
+        }
+
+        document.querySelectorAll('#bl-table input[type="checkbox"]').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                updateTotalAmount();
+                checkCheckboxes();
+                var row = checkbox.closest('tr');
+                var numBL = row.cells[1].innerText.trim();
+                var montant = row.cells[2].innerText.trim();
+                console.log('Num BL:', numBL, 'Montant:', montant);
+            });
+        });
+
+        function updateTotalAmount() {
+            var totalAmount = 0;
+            document.querySelectorAll('#bl-table input[type="checkbox"]').forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    var row = checkbox.closest('tr');
+                    var montantText = row.cells[2].innerText.trim().replace('DT', '').replace(',', '.');
+                    var montant = parseFloat(montantText);
+                    totalAmount += montant;
+                }
+            });
+            document.getElementById('totalAmount').innerText = totalAmount.toFixed(2) + ' DT';
+        }
+
+        document.getElementById('validateBtn').addEventListener('click', function () {
+            var totalFacture = parseFloat(document.getElementById('totalFacture').value.replace(',', '.'));
+            var totalAmount = parseFloat(document.getElementById('totalAmount').innerText.replace('DT', '').replace(',', '.'));
+
+            if (totalFacture !== totalAmount) {
+                alert('Le total de la facture et le montant total sélectionné ne sont pas égaux.');
+            } else {
+                document.querySelector('.scrolling-table').classList.remove('hidden');
+            }
+        });
+
+        function updateCodeFournisseur() {
+            var selectElement = document.getElementById("fournisseur-select");
+            var selectedIndex = selectElement.selectedIndex;
+            var codeFournisseur = selectElement.options[selectedIndex].value;
+            document.getElementById("fournisseur-code").value = codeFournisseur;
+        }
+    </script>
+{% endblock %}
+

@@ -1,0 +1,36 @@
+
+CreateAccount:
+    path: /creation-compte
+    controller: App\Controller\LoginController::CreateAccount
+
+forgottenPassword:
+    path: /mot-de-passe-oublie
+    controller: App\Controller\LoginController::forgottenPassword
+
+ListeCommandes:
+    path: /liste-commandes
+    controller: App\Controller\LoginController::ListeCommandes
+
+Commande:
+    path: /commande
+    controller: App\Controller\LoginController::Commande
+
+ListeFactures:
+    path: /liste-factures
+    controller: App\Controller\LoginController::ListeFactures
+
+Facture:
+    path: /facture
+    controller: App\Controller\LoginController::Facture
+
+BL:
+        path: /BL
+        controller: App\Controller\LoginController::BL
+
+app_login:
+    path: /
+    controller: App\Controller\SecurityController::login
+
+app_logout:
+    path: /logout
+    controller: App\Controller\SecurityController::logout

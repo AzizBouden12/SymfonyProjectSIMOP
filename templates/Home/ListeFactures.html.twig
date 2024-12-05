@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Factures{% endblock %}
+
+{% block body %}
+    <body>
+
+    <div class="scrolling-table">
+        <table>
+            <thead>
+            <tr>
+                <th>Factures en cours</th>
+            </tr>
+            <tr>
+                <th colspan="1">
+                    <input type="text" placeholder="Recherche..." class="search-bar">
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><a href="{{ path('Facture') }}" class="table-link">Item 1 </a></td>
+            </tr>
+            <tr>
+                <td><a href="{{ path('Facture') }}" class="table-link">Item 2 </a></td>
+            </tr>
+            <tr>
+                <td><a href="{{ path('Facture') }}" class="table-link">Item 3 </a></td>
+            </tr>
+            <tr>
+                <td><a href="{{ path('Facture') }}" class="table-link">Item 4 </a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    </body>
+{% endblock %}

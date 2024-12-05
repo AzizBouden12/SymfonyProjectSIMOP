@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css') }}" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="{{ asset('assets/css/ForgotPassword.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/Home.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/Commande.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/BL.css') }}">
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    {% endblock %}
+</head>
+<body>
+<nav>
+    <div class="nav-left">
+        <div class="logo">Logo</div>
+    </div>
+    <div class="nav-middle">
+        <a href="{{ path('BL') }}">BL</a>
+        <a href="{{ path('ListeCommandes') }}">Commandes</a>
+        <a href="{{ path('ListeFactures') }}">Factures</a>
+    </div>
+    <div class="nav-right">
+        {% if app.user %}
+            <span class="username">{{ app.user.userIdentifier }}</span>
+            <i class="fas fa-user user-icon"></i>
+            <form action="{{ path('app_logout') }}" method="post" style="display: inline;">
+                <button type="submit" class="logout-button">Déconnexion</button>
+            </form>
+        {% else %}
+            <span class="username">Nom d'utilisateur</span>
+            <i class="fas fa-user user-icon"></i>
+        {% endif %}
+    </div>
+</nav>
+{% block body %}{% endblock %}
+</body>
+</html>

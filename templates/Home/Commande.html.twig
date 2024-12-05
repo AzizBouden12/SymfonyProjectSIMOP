@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commandes{% endblock %}
+
+{% block body %}
+    <body>
+
+    <div class="scrolling-table">
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">
+                    <input type="text" placeholder="Recherche..." class="search-bar">
+                </th>
+            </tr>
+            <tr>
+                <th>Date Suggestion</th>
+                <th>Appel/Offre</th>
+                <th>Désignation</th>
+                <th>Quantité</th>
+                <th>Qté stock</th>
+                <th>Mouvement 3 mois</th>
+                <th>Mouvement 6 mois</th>
+                <th>Réf remplacement1</th>
+                <th>Qté rr1</th>
+                <th>Réf remplacement2</th>
+                <th>Qté rr2</th>
+                <th>Réf remplacement3</th>
+                <th>Qté rr3</th>
+                <th>Validation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>2024-07-19</td>
+                <td>Appel</td>
+                <td>Produit A</td>
+                <td>10</td>
+                <td>5</td>
+                <td>30</td>
+                <td>60</td>
+                <td>Ref1</td>
+                <td>5</td>
+                <td>Ref2</td>
+                <td>8</td>
+                <td>Ref3</td>
+                <td>2</td>
+                <td><input type="checkbox" id="valider1"><label for="valider1"> Valider</label></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    </body>
+{% endblock %}
